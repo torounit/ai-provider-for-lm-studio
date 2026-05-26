@@ -118,3 +118,64 @@ function allow_lm_studio_host(bool $is_external, string $host, string $url): boo
 }
 
 add_filter('http_request_host_is_external', __NAMESPACE__ . '\\allow_lm_studio_host', 10, 3);
+
+/**
+ * Declares AI credential availability for LM Studio.
+ *
+ * LM Studio does not require real API key configuration — it accepts any Bearer token.
+ * This filter lets the WordPress AI plugin know credentials are "available" whenever
+ * the LM Studio provider is registered, bypassing the HTTP-based isProviderConfigured()
+ * check that is designed for cloud providers with real API keys.
+ *
+ * @since 1.0.0
+ *
+ * @param bool  $has_credentials Whether AI credentials are available.
+ * @param array $connectors      The registered connectors.
+ * @return bool True when LM Studio provider is registered.
+ */
+function declare_ai_credentials(bool $has_credentials, array $connectors): bool
+{
+    if ($has_credentials) {
+        return true;
+    }
+
+    if (!class_exists(AiClient::class)) {
+        return $has_credentials;
+    }
+
+    return AiClient::defaultRegistry()->hasProvider(LmStudioProvider::class);
+}
+
+add_filter('wpai_has_ai_credentials', __NAMESPACE__ . '\\declare_ai_credentials', 10, 2);
+
+/**
+ * Short-circuits the text-generation support check for LM Studio.
+ *
+ * The default check calls wp_ai_client_prompt('Test')->is_supported_for_text_generation(),
+ * which iterates all providers. We short-circuit to use isProviderConfigured() directly
+ * so LM Studio's availability is confirmed by its /v1/models response alone.
+ *
+ * @since 1.0.0
+ *
+ * @param bool|null $valid Whether valid credentials are available, or null to use the default check.
+ * @return bool|null True when LM Studio is configured, null to fall through to the default check.
+ */
+function pre_valid_credentials_check(?bool $valid): ?bool
+{
+    if ($valid !== null) {
+        return $valid;
+    }
+
+    if (!class_exists(AiClient::class)) {
+        return null;
+    }
+
+    $registry = AiClient::defaultRegistry();
+    if (!$registry->hasProvider(LmStudioProvider::class)) {
+        return null;
+    }
+
+    return $registry->isProviderConfigured(LmStudioProvider::class);
+}
+
+add_filter('wpai_pre_has_valid_credentials_check', __NAMESPACE__ . '\\pre_valid_credentials_check');
