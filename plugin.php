@@ -42,6 +42,14 @@ function register_provider(): void
         return;
     }
 
+    /*
+     * LM Studio accepts any Bearer token, so we use a placeholder when no key is explicitly configured.
+     * This prevents the admin UI from prompting for an API key that is not actually required.
+     */
+    if (getenv('LM_STUDIO_API_KEY') === false && !defined('LM_STUDIO_API_KEY')) {
+        putenv('LM_STUDIO_API_KEY=lm-studio');
+    }
+
     $registry = AiClient::defaultRegistry();
 
     if ($registry->hasProvider(LmStudioProvider::class)) {
