@@ -28,7 +28,6 @@ Available models are dynamically discovered from the LM Studio local server API.
 
 * PHP 7.4 or higher
 * [LM Studio](https://lmstudio.ai/) running locally with the local server enabled
-* For WordPress 6.9, the [wordpress/php-ai-client](https://github.com/WordPress/php-ai-client) package must be installed
 * For WordPress 7.0 and above, no additional changes are required
 
 == Installation ==
@@ -36,14 +35,15 @@ Available models are dynamically discovered from the LM Studio local server API.
 1. Upload the plugin files to `/wp-content/plugins/ai-provider-for-lm-studio/`
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Start LM Studio and enable the local server
-4. Set the `LM_STUDIO_API_KEY` environment variable to any string (e.g. `lm-studio`)
-5. Optionally set `LM_STUDIO_BASE_URL` if your LM Studio server is not on the default `http://localhost:1234/v1`
+4. Optionally set `LM_STUDIO_BASE_URL` if your LM Studio server is not on the default `http://localhost:1234/v1`
 
 == Frequently Asked Questions ==
 
 = Do I need an API key for LM Studio? =
 
-LM Studio does not require authentication, but the SDK needs an API key value set. Set the `LM_STUDIO_API_KEY` environment variable to any arbitrary string such as `lm-studio`.
+No. The plugin automatically uses a placeholder Bearer token so LM Studio works out of the box without any API key configuration.
+
+If LM Studio's server authentication is enabled, enter your API key in **Settings > Connectors** or set the `LM_STUDIO_API_KEY` environment variable.
 
 = How do I change the LM Studio server URL? =
 
