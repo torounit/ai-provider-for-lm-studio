@@ -22,6 +22,7 @@ namespace ToroUnit\LmStudioAiProvider;
 
 use ToroUnit\LmStudioAiProvider\Provider\LmStudioProvider;
 use WordPress\AiClient\AiClient;
+use WordPress\AiClient\Providers\Http\DTO\ApiKeyRequestAuthentication;
 
 if (!defined('ABSPATH')) {
     return;
@@ -42,21 +43,78 @@ function register_provider(): void
         return;
     }
 
-    /*
-     * LM Studio accepts any Bearer token, so we use a placeholder when no key is explicitly configured.
-     * This prevents the admin UI from prompting for an API key that is not actually required.
-     */
-    if (getenv('LM_STUDIO_API_KEY') === false && !defined('LM_STUDIO_API_KEY')) {
-        putenv('LM_STUDIO_API_KEY=lm-studio');
-    }
-
     $registry = AiClient::defaultRegistry();
 
     if ($registry->hasProvider(LmStudioProvider::class)) {
         return;
     }
 
+    /*
+     * LM Studio accepts any Bearer token, so we set a placeholder key when none is configured.
+     * putenv() ensures the connector registry detects a key source of 'env' (preventing the admin
+     * UI from prompting for an API key). We also call setProviderRequestAuthentication() directly
+     * because putenv() can be unreliable in some environments (e.g. wp-now / PHP WASM).
+     */
+    $needsDefaultKey = getenv('LM_STUDIO_API_KEY') === false && !defined('LM_STUDIO_API_KEY');
+    if ($needsDefaultKey) {
+        putenv('LM_STUDIO_API_KEY=lm-studio');
+    }
+
     $registry->registerProvider(LmStudioProvider::class);
+
+    if ($needsDefaultKey && $registry->getProviderRequestAuthentication(LmStudioProvider::class) === null) {
+        $registry->setProviderRequestAuthentication(
+            LmStudioProvider::class,
+            new ApiKeyRequestAuthentication('lm-studio')
+        );
+    }
 }
 
 add_action('init', __NAMESPACE__ . '\\register_provider', 5);
+
+/**
+ * Adds LM Studio's port to WordPress's safe ports list so wp_http_validate_url() passes.
+ *
+ * By default WordPress only allows ports 80, 443, and 8080. LM Studio defaults to 1234.
+ *
+ * @since 1.0.0
+ *
+ * @param int[]  $ports Allowed ports.
+ * @param string $host  Request hostname.
+ * @param string $url   Request URL.
+ * @return int[] Modified allowed ports.
+ */
+function allow_lm_studio_port(array $ports, string $host, string $url): array
+{
+    $parsed = parse_url(LmStudioProvider::url());
+    if (
+        isset($parsed['host'], $parsed['port']) &&
+        strtolower($parsed['host']) === strtolower($host)
+    ) {
+        $ports[] = $parsed['port'];
+    }
+    return $ports;
+}
+
+add_filter('http_allowed_safe_ports', __NAMESPACE__ . '\\allow_lm_studio_port', 10, 3);
+
+/**
+ * Allows WordPress to make HTTP requests to LM Studio even when it runs on a private/local IP.
+ *
+ * @since 1.0.0
+ *
+ * @param bool   $is_external Whether the host is considered external.
+ * @param string $host        Request hostname.
+ * @param string $url         Request URL.
+ * @return bool True when the host matches LM Studio's configured host.
+ */
+function allow_lm_studio_host(bool $is_external, string $host, string $url): bool
+{
+    $parsed = parse_url(LmStudioProvider::url());
+    if (isset($parsed['host']) && strtolower($parsed['host']) === strtolower($host)) {
+        return true;
+    }
+    return $is_external;
+}
+
+add_filter('http_request_host_is_external', __NAMESPACE__ . '\\allow_lm_studio_host', 10, 3);
