@@ -19,7 +19,7 @@ use WordPress\AiClient\Providers\OpenAiCompatibleImplementation\AbstractOpenAiCo
 /**
  * Class for the LM Studio model metadata directory.
  *
- * @since 1.0.0
+ * @since 0.1.0
  *
  * @phpstan-type ModelsResponseData array{
  *     data: list<array{id: string}>
@@ -30,7 +30,7 @@ class LmStudioModelMetadataDirectory extends AbstractOpenAiCompatibleModelMetada
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected function createRequest(HttpMethodEnum $method, string $path, array $headers = [], $data = null): Request
     {
@@ -45,7 +45,7 @@ class LmStudioModelMetadataDirectory extends AbstractOpenAiCompatibleModelMetada
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected function parseResponseToModelMetadataList(Response $response): array
     {

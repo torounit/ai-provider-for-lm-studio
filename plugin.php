@@ -6,7 +6,7 @@
  * Description: LM Studio AI Provider for the WordPress AI Client.
  * Requires at least: 7.0
  * Requires PHP: 7.4
- * Version: 1.0.0
+ * Version: 0.1.0
  * Author: Toro_Unit
  * Author URI: https://torounit.com/
  * License: GPL-2.0-or-later
@@ -33,7 +33,7 @@ require_once __DIR__ . '/src/autoload.php';
 /**
  * Registers the AI Provider for LM Studio with the AI Client.
  *
- * @since 1.0.0
+ * @since 0.1.0
  *
  * @return void
  */
@@ -59,7 +59,7 @@ add_action('init', __NAMESPACE__ . '\\register_provider', 5);
  *
  * By default WordPress only allows ports 80, 443, and 8080. LM Studio defaults to 1234.
  *
- * @since 1.0.0
+ * @since 0.1.0
  *
  * @param int[]  $ports Allowed ports.
  * @param string $host  Request hostname.
@@ -83,7 +83,7 @@ add_filter('http_allowed_safe_ports', __NAMESPACE__ . '\\allow_lm_studio_port', 
 /**
  * Allows WordPress to make HTTP requests to LM Studio even when it runs on a private/local IP.
  *
- * @since 1.0.0
+ * @since 0.1.0
  *
  * @param bool   $is_external Whether the host is considered external.
  * @param string $host        Request hostname.
@@ -109,7 +109,7 @@ add_filter('http_request_host_is_external', __NAMESPACE__ . '\\allow_lm_studio_h
  * the LM Studio provider is registered, bypassing the HTTP-based isProviderConfigured()
  * check that is designed for cloud providers with real API keys.
  *
- * @since 1.0.0
+ * @since 0.1.0
  *
  * @param bool  $has_credentials Whether AI credentials are available.
  * @param array $connectors      The registered connectors.
@@ -137,7 +137,7 @@ add_filter('wpai_has_ai_credentials', __NAMESPACE__ . '\\declare_ai_credentials'
  * which iterates all providers. We short-circuit to use isProviderConfigured() directly
  * so LM Studio's availability is confirmed by its /v1/models response alone.
  *
- * @since 1.0.0
+ * @since 0.1.0
  *
  * @param bool|null $valid Whether valid credentials are available, or null to use the default check.
  * @return bool|null True when LM Studio is configured, null to fall through to the default check.
@@ -169,7 +169,7 @@ add_filter('wpai_pre_has_valid_credentials_check', __NAMESPACE__ . '\\pre_valid_
  * a database-stored key takes precedence over the placeholder. Applies the placeholder
  * only when no authentication has been set by env var, constant, or database option.
  *
- * @since 1.0.0
+ * @since 0.1.0
  *
  * @return void
  */

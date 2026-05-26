@@ -3,7 +3,7 @@ Contributors: torounit
 Tags: ai, lm-studio, llm, artificial-intelligence, connector
 Requires at least: 6.9
 Tested up to: 6.9
-Stable tag: 1.0.0
+Stable tag: 0.1.0
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -55,6 +55,6 @@ No, this plugin requires the PHP AI Client plugin to be installed and activated.
 
 == Changelog ==
 
-= 1.0.0 =
+= 0.1.0 =
 
 * Initial release

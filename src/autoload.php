@@ -3,7 +3,7 @@
 /**
  * PSR-4 autoloader for the AI Provider for LM Studio package.
  *
- * @since 1.0.0
+ * @since 0.1.0
  *
  * @package ToroUnit\LmStudioAiProvider
  */

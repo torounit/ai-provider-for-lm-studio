@@ -12,14 +12,14 @@ use WordPress\AiClient\Providers\OpenAiCompatibleImplementation\AbstractOpenAiCo
 /**
  * Class for a LM Studio text generation model.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 class LmStudioTextGenerationModel extends AbstractOpenAiCompatibleTextGenerationModel
 {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected function createRequest(
         HttpMethodEnum $method,

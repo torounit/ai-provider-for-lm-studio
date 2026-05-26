@@ -19,14 +19,14 @@ use WordPress\AiClient\Providers\Models\DTO\ModelMetadata;
 /**
  * Class for the AI Provider for LM Studio.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 class LmStudioProvider extends AbstractApiProvider
 {
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected static function baseUrl(): string
     {
@@ -40,7 +40,7 @@ class LmStudioProvider extends AbstractApiProvider
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected static function createProviderMetadata(): ProviderMetadata
     {
@@ -57,7 +57,7 @@ class LmStudioProvider extends AbstractApiProvider
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected static function createProviderAvailability(): ProviderAvailabilityInterface
     {
@@ -69,7 +69,7 @@ class LmStudioProvider extends AbstractApiProvider
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected static function createModelMetadataDirectory(): ModelMetadataDirectoryInterface
     {
@@ -79,7 +79,7 @@ class LmStudioProvider extends AbstractApiProvider
     /**
      * {@inheritDoc}
      *
-     * @since 1.0.0
+     * @since 0.1.0
      */
     protected static function createModel(
         ModelMetadata $modelMetadata,
