@@ -49,25 +49,7 @@ function register_provider(): void
         return;
     }
 
-    /*
-     * LM Studio accepts any Bearer token, so we set a placeholder key when none is configured.
-     * putenv() ensures the connector registry detects a key source of 'env' (preventing the admin
-     * UI from prompting for an API key). We also call setProviderRequestAuthentication() directly
-     * because putenv() can be unreliable in some environments (e.g. wp-now / PHP WASM).
-     */
-    $needsDefaultKey = getenv('LM_STUDIO_API_KEY') === false && !defined('LM_STUDIO_API_KEY');
-    if ($needsDefaultKey) {
-        putenv('LM_STUDIO_API_KEY=lm-studio');
-    }
-
     $registry->registerProvider(LmStudioProvider::class);
-
-    if ($needsDefaultKey && $registry->getProviderRequestAuthentication(LmStudioProvider::class) === null) {
-        $registry->setProviderRequestAuthentication(
-            LmStudioProvider::class,
-            new ApiKeyRequestAuthentication('lm-studio')
-        );
-    }
 }
 
 add_action('init', __NAMESPACE__ . '\\register_provider', 5);
@@ -179,3 +161,38 @@ function pre_valid_credentials_check(?bool $valid): ?bool
 }
 
 add_filter('wpai_pre_has_valid_credentials_check', __NAMESPACE__ . '\\pre_valid_credentials_check');
+
+/**
+ * Sets a placeholder API key when no real key is configured.
+ *
+ * Runs after _wp_connectors_pass_default_keys_to_ai_client() (init:20) so that
+ * a database-stored key takes precedence over the placeholder. Applies the placeholder
+ * only when no authentication has been set by env var, constant, or database option.
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function apply_placeholder_auth(): void
+{
+    if (!class_exists(AiClient::class)) {
+        return;
+    }
+
+    $registry = AiClient::defaultRegistry();
+
+    if (!$registry->hasProvider(LmStudioProvider::class)) {
+        return;
+    }
+
+    if ($registry->getProviderRequestAuthentication(LmStudioProvider::class) !== null) {
+        return;
+    }
+
+    $registry->setProviderRequestAuthentication(
+        LmStudioProvider::class,
+        new ApiKeyRequestAuthentication('lm-studio')
+    );
+}
+
+add_action('init', __NAMESPACE__ . '\\apply_placeholder_auth', 25);
