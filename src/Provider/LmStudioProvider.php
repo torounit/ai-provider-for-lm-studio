@@ -24,6 +24,13 @@ use WordPress\AiClient\Providers\Models\DTO\ModelMetadata;
 class LmStudioProvider extends AbstractApiProvider
 {
     /**
+     * Default base URL for the LM Studio API.
+     *
+     * @since 0.1.0
+     */
+    private const DEFAULT_BASE_URL = 'http://localhost:1234/v1';
+
+    /**
      * {@inheritDoc}
      *
      * @since 0.1.0
@@ -31,10 +38,11 @@ class LmStudioProvider extends AbstractApiProvider
     protected static function baseUrl(): string
     {
         $url = getenv('LM_STUDIO_BASE_URL');
-        if ($url === false || $url === '') {
-            $url = 'http://localhost:1234/v1';
+        $constant = defined('LM_STUDIO_BASE_URL') ? constant('LM_STUDIO_BASE_URL') : null;
+        if (empty($url) && is_string($constant)) {
+            $url = $constant;
         }
-        return rtrim($url, '/');
+        return rtrim($url ?: self::DEFAULT_BASE_URL, '/');
     }
 
     /**
