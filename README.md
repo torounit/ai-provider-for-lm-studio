@@ -27,9 +27,8 @@ composer require torounit/ai-provider-for-lm-studio
 | Variable | Default | Description |
 |---|---|---|
 | `LM_STUDIO_BASE_URL` | `http://localhost:1234/v1` | Base URL of the LM Studio server |
-| `LM_STUDIO_API_KEY` | `lm-studio` (placeholder) | API key. Only needed when LM Studio server authentication is enabled. |
 
-When used as a WordPress plugin, the API key can also be set in **Settings > Connectors** instead of an environment variable.
+Both environment variables and PHP constants (e.g. `define('LM_STUDIO_BASE_URL', '...')` in `wp-config.php`) are supported.
 
 ## Usage
 
@@ -43,7 +42,6 @@ use WordPress\AiClient\AiClient;
 use ToroUnit\LmStudioAiProvider\Provider\LmStudioProvider;
 
 // putenv('LM_STUDIO_BASE_URL=http://localhost:1234/v1');
-// putenv('LM_STUDIO_API_KEY=your-key'); // only needed when LM Studio auth is enabled
 
 $registry = AiClient::defaultRegistry();
 $registry->registerProvider(LmStudioProvider::class);
