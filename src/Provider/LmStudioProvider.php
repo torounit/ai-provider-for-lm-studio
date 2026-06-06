@@ -33,7 +33,7 @@ class LmStudioProvider extends AbstractApiProvider
     /**
      * Returns the configured LM Studio server URL without any API path suffix.
      *
-     * Reads from the LM_STUDIO_BASE_URL environment variable or PHP constant,
+     * Reads from the LM_STUDIO_SERVER_URL environment variable or PHP constant,
      * falling back to the default. The value should be the server root only,
      * e.g. "http://localhost:1234" — without a trailing /v1 or similar.
      *
@@ -43,8 +43,8 @@ class LmStudioProvider extends AbstractApiProvider
      */
     public static function serverUrl(): string
     {
-        $url = getenv('LM_STUDIO_BASE_URL');
-        $constant = defined('LM_STUDIO_BASE_URL') ? constant('LM_STUDIO_BASE_URL') : null;
+        $url = getenv('LM_STUDIO_SERVER_URL');
+        $constant = defined('LM_STUDIO_SERVER_URL') ? constant('LM_STUDIO_SERVER_URL') : null;
         if (empty($url) && is_string($constant)) {
             $url = $constant;
         }

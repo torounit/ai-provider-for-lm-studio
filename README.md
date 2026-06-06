@@ -26,9 +26,9 @@ composer require torounit/ai-provider-for-lm-studio
 
 | Variable | Default | Description |
 |---|---|---|
-| `LM_STUDIO_BASE_URL` | `http://localhost:1234` | LM Studio server URL (scheme + host + port, no API path) |
+| `LM_STUDIO_SERVER_URL` | `http://localhost:1234` | LM Studio server URL (scheme + host + port, no API path) |
 
-Both environment variables and PHP constants (e.g. `define('LM_STUDIO_BASE_URL', '...')` in `wp-config.php`) are supported.
+Both environment variables and PHP constants (e.g. `define('LM_STUDIO_SERVER_URL', '...')` in `wp-config.php`) are supported.
 
 ## Usage
 
@@ -41,7 +41,7 @@ require __DIR__ . '/vendor/autoload.php';
 use WordPress\AiClient\AiClient;
 use ToroUnit\LmStudioAiProvider\Provider\LmStudioProvider;
 
-// putenv('LM_STUDIO_BASE_URL=http://localhost:1234');
+// putenv('LM_STUDIO_SERVER_URL=http://localhost:1234');
 
 $registry = AiClient::defaultRegistry();
 $registry->registerProvider(LmStudioProvider::class);
