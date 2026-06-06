@@ -22,11 +22,38 @@ use WordPress\AiClient\Providers\OpenAiCompatibleImplementation\AbstractOpenAiCo
  * @since 0.1.0
  *
  * @phpstan-type ModelsResponseData array{
- *     data: list<array{id: string}>
+ *     data: list<array{id: string, type?: string}>
  * }
  */
 class LmStudioModelMetadataDirectory extends AbstractOpenAiCompatibleModelMetadataDirectory
 {
+    /**
+     * {@inheritDoc}
+     *
+     * Uses the LM Studio native /api/v0/models endpoint instead of the
+     * OpenAI-compatible /v1/models endpoint because only the native endpoint
+     * returns a `type` field that distinguishes embedding models from LLMs.
+     *
+     * @since 0.1.0
+     *
+     * @return array<string, ModelMetadata>
+     */
+    protected function sendListModelsRequest(): array
+    {
+        $apiV0Url = LmStudioProvider::serverUrl() . '/api/v0/models';
+        $request  = new Request(HttpMethodEnum::GET(), $apiV0Url);
+        $request  = $this->getRequestAuthentication()->authenticateRequest($request);
+        $response = $this->getHttpTransporter()->send($request);
+        $this->throwIfNotSuccessful($response);
+
+        $list = $this->parseResponseToModelMetadataList($response);
+        $map  = [];
+        foreach ($list as $meta) {
+            $map[$meta->getId()] = $meta;
+        }
+        return $map;
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -55,12 +82,12 @@ class LmStudioModelMetadataDirectory extends AbstractOpenAiCompatibleModelMetada
             throw ResponseException::fromMissingData('LM Studio', 'data');
         }
 
-        $capabilities = [
+        $textCapabilities = [
             CapabilityEnum::textGeneration(),
             CapabilityEnum::chatHistory(),
         ];
 
-        $options = [
+        $textOptions = [
             new SupportedOption(OptionEnum::systemInstruction()),
             new SupportedOption(OptionEnum::maxTokens()),
             new SupportedOption(OptionEnum::temperature()),
@@ -80,13 +107,24 @@ class LmStudioModelMetadataDirectory extends AbstractOpenAiCompatibleModelMetada
 
         return array_values(
             array_map(
-                static function (array $modelData) use ($capabilities, $options): ModelMetadata {
-                    $modelId = $modelData['id'];
+                static function (array $modelData) use ($textCapabilities, $textOptions): ModelMetadata {
+                    $modelId = (string) $modelData['id'];
+                    $type    = isset($modelData['type']) ? (string) $modelData['type'] : '';
+
+                    if ($type === 'embeddings') {
+                        return new ModelMetadata(
+                            $modelId,
+                            $modelId,
+                            [CapabilityEnum::embeddingGeneration()],
+                            []
+                        );
+                    }
+
                     return new ModelMetadata(
                         $modelId,
                         $modelId,
-                        $capabilities,
-                        $options
+                        $textCapabilities,
+                        $textOptions
                     );
                 },
                 $modelsData
