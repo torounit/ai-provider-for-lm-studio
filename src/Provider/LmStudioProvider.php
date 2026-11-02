@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace ToroUnit\LmStudioAiProvider\Provider;
 
 use ToroUnit\LmStudioAiProvider\Metadata\LmStudioModelMetadataDirectory;
+use ToroUnit\LmStudioAiProvider\Models\LmStudioEmbeddingGenerationModel;
 use ToroUnit\LmStudioAiProvider\Models\LmStudioTextGenerationModel;
+use WordPress\AiClient\Common\Exception\RuntimeException;
 use WordPress\AiClient\Providers\ApiBasedImplementation\AbstractApiProvider;
 use WordPress\AiClient\Providers\ApiBasedImplementation\ListModelsApiBasedProviderAvailability;
 use WordPress\AiClient\Providers\Contracts\ModelMetadataDirectoryInterface;
@@ -74,7 +76,7 @@ class LmStudioProvider extends AbstractApiProvider
             ProviderTypeEnum::server(),
             null,
             RequestAuthenticationMethod::apiKey(),
-            'Local LLM inference via LM Studio OpenAI-compatible API.'
+            'Local text and embedding generation via LM Studio OpenAI-compatible API.'
         );
     }
 
@@ -109,6 +111,18 @@ class LmStudioProvider extends AbstractApiProvider
         ModelMetadata $modelMetadata,
         ProviderMetadata $providerMetadata
     ): ModelInterface {
-        return new LmStudioTextGenerationModel($modelMetadata, $providerMetadata);
+        $capabilities = $modelMetadata->getSupportedCapabilities();
+        foreach ($capabilities as $capability) {
+            if ($capability->isTextGeneration()) {
+                return new LmStudioTextGenerationModel($modelMetadata, $providerMetadata);
+            }
+            if ($capability->isEmbeddingGeneration()) {
+                return new LmStudioEmbeddingGenerationModel($modelMetadata, $providerMetadata);
+            }
+        }
+
+        throw new RuntimeException(
+            'Unsupported model capabilities: ' . implode(', ', $capabilities)
+        );
     }
 }

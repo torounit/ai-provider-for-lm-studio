@@ -22,7 +22,7 @@ use WordPress\AiClient\Providers\OpenAiCompatibleImplementation\AbstractOpenAiCo
  * @since 0.1.0
  *
  * @phpstan-type ModelsResponseData array{
- *     data: list<array{id: string, type?: string}>
+ *     data: list<array{id: string, type?: string, arch?: string}>
  * }
  */
 class LmStudioModelMetadataDirectory extends AbstractOpenAiCompatibleModelMetadataDirectory
@@ -103,20 +103,37 @@ class LmStudioModelMetadataDirectory extends AbstractOpenAiCompatibleModelMetada
             new SupportedOption(OptionEnum::outputModalities(), [[ModalityEnum::text()]]),
         ];
 
+        $embeddingCapabilities = [
+            CapabilityEnum::embeddingGeneration(),
+        ];
+
+        $embeddingOptions = [
+            new SupportedOption(OptionEnum::inputModalities(), [[ModalityEnum::text()]]),
+            new SupportedOption(OptionEnum::customOptions()),
+        ];
+
         $modelsData = (array) $responseData['data'];
 
         return array_values(
             array_map(
-                static function (array $modelData) use ($textCapabilities, $textOptions): ModelMetadata {
+                static function (array $modelData) use (
+                    $textCapabilities,
+                    $textOptions,
+                    $embeddingCapabilities,
+                    $embeddingOptions
+                ): ModelMetadata {
                     $modelId = (string) $modelData['id'];
                     $type    = isset($modelData['type']) ? (string) $modelData['type'] : '';
+                    $arch    = isset($modelData['arch']) ? (string) $modelData['arch'] : '';
 
-                    if ($type === 'embeddings') {
+                    // Some embedding models (e.g. MLX builds of jina-embeddings) are reported
+                    // with type "vlm", so the architecture name is checked as well.
+                    if ($type === 'embeddings' || stripos($arch, 'embedding') !== false) {
                         return new ModelMetadata(
                             $modelId,
                             $modelId,
-                            [CapabilityEnum::embeddingGeneration()],
-                            []
+                            $embeddingCapabilities,
+                            $embeddingOptions
                         );
                     }
 

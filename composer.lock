@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f71c2333fa03d5ffd2b317f53569be8",
+    "content-hash": "3a63ad04d6bb506bd27b61f8eabdd572",
     "packages": [],
     "packages-dev": [
         {
@@ -179,7 +179,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-09T07:06:30+00:00"
+            "time": "2024-09-09T07:06:30+00:00",
+            "published-time": "2024-09-09T07:07:05+00:00"
         },
         {
             "name": "php-http/discovery",
@@ -258,7 +259,8 @@
                 "issues": "https://github.com/php-http/discovery/issues",
                 "source": "https://github.com/php-http/discovery/tree/1.20.0"
             },
-            "time": "2024-10-02T11:20:13+00:00"
+            "time": "2024-10-02T11:20:13+00:00",
+            "published-time": "2024-10-02T11:21:00+00:00"
         },
         {
             "name": "php-http/httplug",
@@ -315,7 +317,8 @@
                 "issues": "https://github.com/php-http/httplug/issues",
                 "source": "https://github.com/php-http/httplug/tree/2.4.1"
             },
-            "time": "2024-09-23T11:39:58+00:00"
+            "time": "2024-09-23T11:39:58+00:00",
+            "published-time": "2024-09-23T11:40:47+00:00"
         },
         {
             "name": "php-http/promise",
@@ -367,7 +370,8 @@
                 "issues": "https://github.com/php-http/promise/issues",
                 "source": "https://github.com/php-http/promise/tree/1.3.1"
             },
-            "time": "2024-03-15T13:55:21+00:00"
+            "time": "2024-03-15T13:55:21+00:00",
+            "published-time": "2024-03-15T13:55:45+00:00"
         },
         {
             "name": "phpcompatibility/php-compatibility",
@@ -701,7 +705,8 @@
                 "issues": "https://github.com/php-fig/event-dispatcher/issues",
                 "source": "https://github.com/php-fig/event-dispatcher/tree/1.0.0"
             },
-            "time": "2019-01-08T18:20:26+00:00"
+            "time": "2019-01-08T18:20:26+00:00",
+            "published-time": "2019-03-25T15:31:44+00:00"
         },
         {
             "name": "psr/http-client",
@@ -753,7 +758,8 @@
             "support": {
                 "source": "https://github.com/php-fig/http-client"
             },
-            "time": "2023-09-23T14:17:50+00:00"
+            "time": "2023-09-23T14:17:50+00:00",
+            "published-time": "2023-09-23T14:18:12+00:00"
         },
         {
             "name": "psr/http-factory",
@@ -808,7 +814,8 @@
             "support": {
                 "source": "https://github.com/php-fig/http-factory"
             },
-            "time": "2024-04-15T12:06:14+00:00"
+            "time": "2024-04-15T12:06:14+00:00",
+            "published-time": "2024-05-10T07:32:19+00:00"
         },
         {
             "name": "psr/http-message",
@@ -861,7 +868,8 @@
             "support": {
                 "source": "https://github.com/php-fig/http-message/tree/2.0"
             },
-            "time": "2023-04-04T09:54:51+00:00"
+            "time": "2023-04-04T09:54:51+00:00",
+            "published-time": "2023-04-04T09:55:35+00:00"
         },
         {
             "name": "psr/simple-cache",
@@ -912,7 +920,8 @@
             "support": {
                 "source": "https://github.com/php-fig/simple-cache/tree/master"
             },
-            "time": "2017-10-23T01:57:42+00:00"
+            "time": "2017-10-23T01:57:42+00:00",
+            "published-time": "2018-03-05T09:41:11+00:00"
         },
         {
             "name": "slevomat/coding-standard",
@@ -1060,16 +1069,16 @@
         },
         {
             "name": "wordpress/php-ai-client",
-            "version": "1.3.1",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/php-ai-client.git",
-                "reference": "631704201d15ffeff7091ad3bc7156db74054956"
+                "reference": "f812546113ef3c9e887011eb95101df5ee135b6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/php-ai-client/zipball/631704201d15ffeff7091ad3bc7156db74054956",
-                "reference": "631704201d15ffeff7091ad3bc7156db74054956",
+                "url": "https://api.github.com/repos/WordPress/php-ai-client/zipball/f812546113ef3c9e887011eb95101df5ee135b6e",
+                "reference": "f812546113ef3c9e887011eb95101df5ee135b6e",
                 "shasum": ""
             },
             "require": {
@@ -1095,14 +1104,14 @@
                 "slevomat/coding-standard": "^8.20",
                 "squizlabs/php_codesniffer": "^3.7 || ^4.0",
                 "symfony/dotenv": "^5.4",
-                "wordpress/anthropic-ai-provider": "^1.0",
-                "wordpress/google-ai-provider": "^1.0",
-                "wordpress/openai-ai-provider": "^1.0"
+                "wordpress/ai-provider-for-anthropic": "^1.0",
+                "wordpress/ai-provider-for-google": "^1.0",
+                "wordpress/ai-provider-for-openai": "^1.0"
             },
             "suggest": {
-                "wordpress/anthropic-ai-provider": "For Anthropic Claude model support",
-                "wordpress/google-ai-provider": "For Google Gemini model support",
-                "wordpress/openai-ai-provider": "For OpenAI GPT model support"
+                "wordpress/ai-provider-for-anthropic": "For Anthropic Claude model support",
+                "wordpress/ai-provider-for-google": "For Google Gemini model support",
+                "wordpress/ai-provider-for-openai": "For OpenAI GPT model support"
             },
             "type": "library",
             "autoload": {
@@ -1134,14 +1143,14 @@
                 "issues": "https://github.com/WordPress/php-ai-client/issues",
                 "source": "https://github.com/WordPress/php-ai-client"
             },
-            "time": "2026-03-18T15:46:43+00:00"
+            "time": "2026-10-28T20:34:49+00:00",
+            "published-time": "2026-10-28T20:36:28+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "phpcompatibility/php-compatibility": 20,
-        "wordpress/php-ai-client": 20
+        "phpcompatibility/php-compatibility": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
@@ -1152,5 +1161,5 @@
     "platform-overrides": {
         "php": "7.4"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }
