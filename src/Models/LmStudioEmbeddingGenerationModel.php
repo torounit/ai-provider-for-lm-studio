@@ -66,12 +66,16 @@ class LmStudioEmbeddingGenerationModel extends AbstractApiBasedModel implements 
      */
     protected function prepareGenerateEmbeddingsParams(array $inputs): array
     {
+        if (!array_is_list($inputs)) {
+            throw new InvalidArgumentException('Embedding input must be provided as a list of message parts.');
+        }
+
         if (empty($inputs)) {
             throw new InvalidArgumentException('The API requires at least one input.');
         }
 
         $texts = [];
-        foreach (array_values($inputs) as $index => $part) {
+        foreach ($inputs as $index => $part) {
             if (!$part instanceof MessagePart) {
                 throw new InvalidArgumentException(
                     sprintf('Embedding input at index %d must be a MessagePart.', $index)
@@ -84,7 +88,7 @@ class LmStudioEmbeddingGenerationModel extends AbstractApiBasedModel implements 
             }
 
             $text = $part->getText();
-            if ($text === null || trim($text) === '') {
+            if ($text === null || trim($text, " \f\n\r\t\v\0") === '') {
                 throw new InvalidArgumentException(
                     sprintf('LM Studio embedding input at index %d must contain non-empty text.', $index)
                 );
@@ -154,7 +158,7 @@ class LmStudioEmbeddingGenerationModel extends AbstractApiBasedModel implements 
         if (!isset($responseData['data']) || !$responseData['data']) {
             throw ResponseException::fromMissingData($this->providerMetadata()->getName(), 'data');
         }
-        if (!is_array($responseData['data'])) {
+        if (!is_array($responseData['data']) || !array_is_list($responseData['data'])) {
             throw ResponseException::fromInvalidData(
                 $this->providerMetadata()->getName(),
                 'data',
@@ -163,7 +167,7 @@ class LmStudioEmbeddingGenerationModel extends AbstractApiBasedModel implements 
         }
 
         $embeddings = [];
-        foreach (array_values($responseData['data']) as $index => $embeddingData) {
+        foreach ($responseData['data'] as $index => $embeddingData) {
             if (
                 !is_array($embeddingData) ||
                 !isset($embeddingData['embedding']) ||
