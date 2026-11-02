@@ -89,7 +89,7 @@ if (is_wp_error($embedding)) {
 }
 ```
 
-Only text inputs are supported. The `dimensions` option is not advertised, so models return their native vector size.
+Only text inputs are supported. The `dimensions` option is not supported: LM Studio's embeddings API does not accept it and always returns the model's native vector size, so requests that set `using_dimensions()` are rejected instead of silently returning vectors of a different size.
 
 ## License
 
