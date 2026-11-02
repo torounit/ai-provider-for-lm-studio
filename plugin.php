@@ -4,9 +4,9 @@
  * Plugin Name: AI Provider for LM Studio
  * Plugin URI: https://github.com/torounit/ai-provider-for-lm-studio
  * Description: LM Studio AI Provider for the WordPress AI Client.
- * Requires at least: 7.0
+ * Requires at least: 7.2
  * Requires PHP: 7.4
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Toro_Unit
  * Author URI: https://torounit.com/
  * License: GPL-2.0-or-later

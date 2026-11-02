@@ -5,7 +5,7 @@ LM Studio AI Provider for the [PHP AI Client SDK](https://github.com/WordPress/p
 ## Requirements
 
 - PHP 7.4+
-- [wordpress/php-ai-client](https://github.com/WordPress/php-ai-client) ^1.3
+- [wordpress/php-ai-client](https://github.com/WordPress/php-ai-client) ^1.4 (bundled with WordPress 7.2+)
 - [LM Studio](https://lmstudio.ai/) running locally with the server enabled
 
 ## Installation
@@ -58,6 +58,11 @@ $result = AiClient::prompt('Hello, who are you?')
     ->generateText();
 
 echo $result . "\n";
+
+// Generate embeddings (an embedding model must be loaded in LM Studio)
+$embeddings = AiClient::input(['Hello', 'World'])
+    ->usingProviderModel('lm_studio', 'text-embedding-nomic-embed-text-v1.5')
+    ->generateEmbeddings();
 ```
 
 ### WordPress Plugin
@@ -71,6 +76,20 @@ $result = AiClient::prompt('Hello, who are you?')
     ->usingProvider('lm_studio')
     ->generateText();
 ```
+
+Embeddings are generated through the WordPress 7.2 embedding API. A model must always be specified, since vectors are only comparable when produced by the same model:
+
+```php
+$embedding = wp_ai_client_embedding('Hello, world')
+    ->using_provider_model('lm_studio', 'text-embedding-nomic-embed-text-v1.5')
+    ->generate_embedding();
+
+if (is_wp_error($embedding)) {
+    // Handle the error.
+}
+```
+
+Only text inputs are supported. The `dimensions` option is not advertised, so models return their native vector size.
 
 ## License
 
