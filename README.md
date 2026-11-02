@@ -4,7 +4,7 @@ LM Studio AI Provider for the [PHP AI Client SDK](https://github.com/WordPress/p
 
 ## Requirements
 
-- PHP 8.2+
+- PHP 8.3+
 - [wordpress/php-ai-client](https://github.com/WordPress/php-ai-client) ^1.4 (bundled with WordPress 7.2+)
 - [LM Studio](https://lmstudio.ai/) running locally with the server enabled
 
