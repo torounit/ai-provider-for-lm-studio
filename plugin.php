@@ -11,6 +11,7 @@
  * Author URI: https://torounit.com/
  * License: GPL-2.0-or-later
  * License URI: https://spdx.org/licenses/GPL-2.0-or-later.html
+ * Update URI: https://github.com/torounit/ai-provider-for-lm-studio
  * Text Domain: ai-provider-for-lm-studio
  *
  * @package ToroUnit\LmStudioAiProvider
