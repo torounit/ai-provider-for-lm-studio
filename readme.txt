@@ -4,7 +4,7 @@ Tags: ai, lm-studio, llm, artificial-intelligence, connector
 Requires at least: 7.2
 Tested up to: 7.2
 Stable tag: 0.2.0
-Requires PHP: 7.4
+Requires PHP: 8.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ Available models are dynamically discovered from the LM Studio local server API.
 
 **Requirements:**
 
-* PHP 7.4 or higher
+* PHP 8.2 or higher
 * [LM Studio](https://lmstudio.ai/) running locally with the local server enabled
 * WordPress 7.2 or higher (bundles the PHP AI Client with embedding support)
 

@@ -7,4 +7,7 @@
 /composer.lock
 /phpcs.xml.dist
 /phpstan.neon.dist
+/phpunit.xml.dist
+/tests
+/.wp-env.json
 /vendor
