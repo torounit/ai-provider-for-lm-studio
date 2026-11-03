@@ -22,7 +22,7 @@ use WordPress\AiClient\Providers\OpenAiCompatibleImplementation\AbstractOpenAiCo
  * @since 0.1.0
  *
  * @phpstan-type ModelsResponseData array{
- *     data: list<array{id: string, type?: string, arch?: string}>
+ *     data: list<array{id: string, type?: string}>
  * }
  */
 class LmStudioModelMetadataDirectory extends AbstractOpenAiCompatibleModelMetadataDirectory
@@ -124,11 +124,11 @@ class LmStudioModelMetadataDirectory extends AbstractOpenAiCompatibleModelMetada
                 ): ModelMetadata {
                     $modelId = (string) $modelData['id'];
                     $type    = isset($modelData['type']) ? (string) $modelData['type'] : '';
-                    $arch    = isset($modelData['arch']) ? (string) $modelData['arch'] : '';
 
-                    // Some embedding models (e.g. MLX builds of jina-embeddings) are reported
-                    // with type "vlm", so the architecture name is checked as well.
-                    if ($type === 'embeddings' || stripos($arch, 'embedding') !== false) {
+                    // Only trust the reported type. Models such as MLX builds of jina-embeddings
+                    // are reported as "vlm" and cannot serve /v1/embeddings; LM Studio silently
+                    // answers such requests with another loaded embedding model instead.
+                    if ($type === 'embeddings') {
                         return new ModelMetadata(
                             $modelId,
                             $modelId,

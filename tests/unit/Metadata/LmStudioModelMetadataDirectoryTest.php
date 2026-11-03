@@ -51,7 +51,7 @@ class LmStudioModelMetadataDirectoryTest extends TestCase
                     'type' => 'vlm',
                     'arch' => 'jina_embeddings_v5_omni',
                 ],
-                $embedding,
+                $text,
             ],
             'llm' => [['id' => 'liquid/lfm2-24b-a2b', 'type' => 'llm', 'arch' => 'lfm2moe'], $text],
             'vlm' => [['id' => 'qwen/qwen3.5-9b', 'type' => 'vlm', 'arch' => 'qwen35'], $text],
